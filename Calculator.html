@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Calculator</title>
+  <link type="text/css" rel="stylesheet" href="style.css"/>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+  <script>
+  jQuery(document).ready(function($) {
+
+    var num1 = [],
+      num2 = [],
+      operand = null,
+      solved = false,
+      display = $("#screen"),
+      answer = 0;
+
+
+  $(".number").click(function () {
+      var input = $(this).text();
+
+      if (solved) {
+         clear();
+     }
+
+      if (operand == null) {
+          num1.push(input);
+          display.html(num1.join(''));
+      } else {
+          num2.push(input);
+          display.html(num1.join('') + operand + num2.join(''));
+      }
+  });
+
+
+  $(".operation").not("#deicmal", "#equals").click(function () {
+
+      var input = $(this).text();
+
+      // conditional allows users to keep computing numbers off last result
+      if (solved == true) {
+          num1 = answer;
+          num2 = [];
+          solved = false;
+          operand = null;
+      }
+      setOperand(input);
+  });
+
+
+  $('#c').click(function () {
+      clear();
+  });
+
+
+  $("#equals").click(function () {
+      if (num1 && num2 && operand) {
+
+          var n1 = +num1.join(''),
+              n2 = +num2.join(''),
+              result = null;
+
+          switch (operand) {
+              case '+':
+                  result = n1 + n2;
+                  break;
+              case '-':
+                  result = n1 - n2;
+                  break;
+              case '*':
+                  result = n1 * n2;
+                  break;
+              case '/':
+                  result = n1 / n2;
+                  break;
+          }
+
+          display.html(formatNum(result));
+          num1 = [result]; //user can keep hitting 'enter' to continue calculations.
+          num2 = [n2];
+          solved = true;
+      }
+  });
+
+  //
+  function setOperand(symbol) {
+      if (!operand) {
+          operand = symbol.replace("x", "*").replace("%", "/");
+          $screen.html(num1.join('') + operand);
+      }
+  }
+
+  function clear() {
+      num1 = [];
+      num2 = [];
+      operand = null;
+      solved = false;
+      display.html(0);
+  }
+
+  function formatNum(num) {
+      return (num % 1 === 0) ? num : num.toFixed(4);
+  }
+});
+
+</script>
+</head>
+<body>
+<div class="calcbody">
+  <div class="topcont">
+  <div class="clear" id="c">
+    C
+  </div>
+  <div id="screen">
+    0
+  </div>
+</div>
+<div class="numbercont">
+<div class="number" id ="num">
+  <a>7</a>
+</div>
+<div class="number" id ="num">
+  <a>8</a>
+</div>
+<div class="number" id ="num">
+  <a>9</a>
+</div>
+<div class="operation" id ="plus">
+  <a>+</a>
+</div>
+<div class="number" id ="num">
+  <a>4</a>
+</div>
+<div class="number" id ="num">
+  <a>5</a>
+</div>
+<div class="number" id ="num">
+  <a>6</a>
+</div>
+<div class="operation" id ="minus">
+  <a>-</a>
+</div>
+<div class="number" id ="num">
+  <a>1</a>
+</div>
+<div class="number" id ="num">
+  <a>2</a>
+</div>
+<div class="number" id ="num">
+  <a>3</a>
+</div>
+<div class="operation" id ="times">
+  <a>*</a>
+</div>
+<div class="operation" id="decimal">
+  <a>.</a>
+</div>
+<div class="number" id ="num">
+  <a>0</a>
+</div>
+<div class="operation" id ="equals">
+ <a>=</a>
+</div>
+<div class="operation" id ="divide">
+  <a>/</a>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>
